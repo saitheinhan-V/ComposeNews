@@ -45,7 +45,7 @@ fun MainView(
         ) {
             if (isLoading) {
                 LoadingDialog(
-                    message = "Loading..."
+                    message = "Loading.."
                 )
             }else{
                 LazyColumn (
