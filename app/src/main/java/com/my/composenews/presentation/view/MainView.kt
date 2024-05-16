@@ -36,26 +36,26 @@ fun MainView(
         }
     }
 
-    if (isLoading) {
-        LoadingDialog(
-            message = "Loading..."
-        )
-    }
-
     Scaffold(
         modifier = Modifier.padding(0.dp)
     ) {
         Column(
             modifier = Modifier.padding(it)
         ) {
-            LazyColumn {
-                itemsIndexed(
-                    items = news,
-                ) { index, item ->
-                    MainContent(
-                        modifier = Modifier.padding(it),
-                        item = item
-                    )
+            if (isLoading) {
+                LoadingDialog(
+                    message = "Loading..."
+                )
+            }else{
+                LazyColumn {
+                    itemsIndexed(
+                        items = news,
+                    ) { index, item ->
+                        MainContent(
+                            modifier = Modifier.padding(it),
+                            item = item
+                        )
+                    }
                 }
             }
         }
