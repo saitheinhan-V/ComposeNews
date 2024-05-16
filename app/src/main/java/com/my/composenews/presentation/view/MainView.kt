@@ -3,6 +3,7 @@ package com.my.composenews.presentation.view
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -36,27 +37,29 @@ fun MainView(
         }
     }
 
-    if (isLoading) {
-        LoadingDialog(
-            message = "Loading..."
-        )
-    }
-
     Scaffold(
         modifier = Modifier.padding(0.dp)
     ) {
         Column(
             modifier = Modifier.padding(it)
         ) {
-            LazyColumn {
-                itemsIndexed(
-                    items = news,
-                ) { index, item ->
-                    MainContent(
-                        modifier = Modifier.padding(it),
-                        item = item
-                    )
-                }
+            if (isLoading) {
+                LoadingDialog(
+                    message = "Loading..."
+                )
+            }else{
+                LazyColumn (
+                    content = {
+                        items(
+                            items = news
+                        ){item ->
+                            MainContent(
+                                modifier = Modifier.padding(it),
+                                item = item
+                            )
+                        }
+                    }
+                )
             }
         }
     }
