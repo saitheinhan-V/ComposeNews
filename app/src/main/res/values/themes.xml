@@ -2,4 +2,11 @@
 <resources>
 
     <style name="Theme.ComposeNews" parent="android:Theme.Material.Light.NoActionBar" />
+    
+    <style name="MySplash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/Theme.ComposeNews</item>
+        <item name="android:animationDuration">1000</item>
+    </style>
 </resources>

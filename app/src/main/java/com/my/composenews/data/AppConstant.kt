@@ -8,5 +8,5 @@ object AppConstant {
     const val CATEGORY = "business"
 
     const val PAGE_SIZE = 10
-    const val PAGE_NO = 1
+    const val INITIAL_PAGE = 1
 }

@@ -2,6 +2,8 @@ package com.my.composenews.ui.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,12 +39,13 @@ fun LoadingDialog(
             modifier = Modifier
                 .clip(RoundedCornerShape(10.dp))
                 .background(Color.White)
-                .padding(12.dp),
+                .padding(15.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CircularProgressIndicator(
                 modifier = Modifier.size(30.dp)
             )
+            Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = message,
                 textAlign = TextAlign.Center

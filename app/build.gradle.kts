@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.compose.coil)
+    implementation(libs.androidx.splash)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -84,4 +85,10 @@ dependencies {
 
     //retrofit
     implementation(libs.bundles.network)
+
+    //paging
+    implementation(libs.bundles.paging)
+
+    //data-store
+    implementation(libs.bundles.data.store)
 }

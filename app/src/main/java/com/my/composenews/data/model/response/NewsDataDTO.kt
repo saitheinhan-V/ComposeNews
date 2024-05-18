@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NewsDataDTO(
-    val articles: MutableList<NewsDTO> = mutableListOf(),
+    val articles: List<NewsDTO> = listOf(),
     val status: String = "",
     val totalResults: Int = 0
 )
