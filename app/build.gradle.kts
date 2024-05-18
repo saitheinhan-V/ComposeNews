@@ -91,4 +91,7 @@ dependencies {
 
     //data-store
     implementation(libs.bundles.data.store)
+
+    //accompanist
+//    implementation(libs.bundles.google.accompanist)
 }

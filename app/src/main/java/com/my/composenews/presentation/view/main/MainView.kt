@@ -1,5 +1,6 @@
 package com.my.composenews.presentation.view.main
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -28,6 +30,7 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
+import com.my.composenews.data.AppConstant
 import com.my.composenews.domain.vo.NewsVo
 import com.my.composenews.presentation.event.MainAction
 import com.my.composenews.presentation.event.MainEvent
@@ -46,7 +49,8 @@ fun MainView(
     modifier: Modifier = Modifier,
     news: Flow<PagingData<NewsVo>> = emptyFlow(),
     event: SharedFlow<MainEvent> = MutableSharedFlow(),
-    onAction: (MainAction) -> Unit = {}
+    onAction: (MainAction) -> Unit = {},
+    category: String = AppConstant.CATEGORY
 ) {
     val snackState: SnackbarHostState = remember { SnackbarHostState() }
     val pagingItems = news.collectAsLazyPagingItems()

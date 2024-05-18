@@ -54,6 +54,9 @@ network-coroutines = { module = "com.jakewharton.retrofit:retrofit2-kotlin-corou
 network-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.6.4" }
 network-profiler = { module = "com.localebro:okhttpprofiler", version = "1.0.8" }
 network-gson-converter = { module = "com.squareup.retrofit2:converter-gson", version = "2.9.0" }
+#accompanist
+google-accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version = "0.28.0"}
+google-accompanist-pager-indicator = { module = "com.google.accompanist:accompanist-pager-indicators", version = "0.28.0"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -83,6 +86,11 @@ data-store = [
     "androidx-datastore",
     "androidx-datastore-core",
     "androidx-datastore-preferences"
+]
+
+google-accompanist = [
+    "google-accompanist-pager",
+    "google-accompanist-pager-indicator"
 ]
 
 

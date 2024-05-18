@@ -19,13 +19,19 @@ import androidx.core.view.WindowCompat
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
     secondary = PurpleGrey80,
-    tertiary = Color.White
+    tertiary = Color.White,
+    onSecondary = Color.Gray,
+    onSurface = Color(color = 0xFF1A1C19),
+    background = Black
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Color.White
+    primary = Purple80,
+    secondary = PurpleGrey80,
+    tertiary = Color.White,
+    onSecondary = Color.Gray,
+    onSurface = Color(color = 0xFF1A1C19),
+    background = White
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -40,9 +46,9 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun ComposeNewsTheme(
-//    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     appThemeStatus: AppThemeStatus = AppThemeStatus.Light,
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
@@ -73,7 +79,8 @@ fun ComposeNewsTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
+//            window.statusBarColor = colorScheme.primary.toArgb()
+            window.statusBarColor = colorScheme.background.toArgb()
             WindowCompat.setDecorFitsSystemWindows(window,true)
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = isDarkIcon
             WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars =

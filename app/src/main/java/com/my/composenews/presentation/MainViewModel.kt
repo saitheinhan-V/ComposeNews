@@ -61,7 +61,7 @@ class MainViewModel @Inject constructor(
             initialValue = vmState.value.asAppTheme()
         )
     init {
-        observeNews()
+//        observeNews()
         observeAppTheme()
 
     }
@@ -78,7 +78,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun observeNews(){
+    fun observeNews(category: String){
         viewModelScope.launch {
             if(!networkHelper.isNetworkConnected()){
                 vmEvent.emit(MainEvent.showSnack("No internet connection!"))
@@ -113,7 +113,7 @@ class MainViewModel @Inject constructor(
 //                    }
 //                }
 //            }
-            useCase.getNews("business").collectLatest { pagingData ->
+            useCase.getNews(category).collectLatest { pagingData ->
                 vmState.update { state ->
                     state.copy(
                         news = flow {
