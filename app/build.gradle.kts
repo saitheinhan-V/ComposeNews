@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.google.hilt)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.google.gms)
 }
 
 android {
@@ -79,6 +80,7 @@ dependencies {
 
     implementation(libs.kotlinx.json)
 
+
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.hilt.navigation)
@@ -94,4 +96,11 @@ dependencies {
 
     //accompanist
 //    implementation(libs.bundles.google.accompanist)
+    implementation(libs.google.accompanist.permissions)
+
+    //firebase
+//    implementation(libs.bundles.firebase)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging.ktx)
+    implementation(libs.firebase.analytics.ktx)
 }

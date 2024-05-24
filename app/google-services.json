@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "76669152664",
+    "project_id": "composenews-b6b73",
+    "storage_bucket": "composenews-b6b73.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:76669152664:android:fb76108e23047bc8df0fed",
+        "android_client_info": {
+          "package_name": "com.my.composenews"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVPS4dN6A8596eBrJYlElgjfaFcz_1lac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

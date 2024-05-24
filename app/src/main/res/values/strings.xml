@@ -2,10 +2,10 @@
     <string name="app_name">ComposeNews</string>
 
     <string-array name="news_category">
+        <item>Health</item>
         <item>Business</item>
         <item>Entertainment</item>
         <item>General</item>
-        <item>Health</item>
         <item>Science</item>
         <item>Sports</item>
         <item>Technology</item>

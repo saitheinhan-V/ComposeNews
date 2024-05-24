@@ -13,11 +13,14 @@ data class MainViewModelState(
     val isError: String = "",
     val news: Flow<PagingData<NewsVo>> = emptyFlow(),
     val page: Int = 0,
-    val appTheme: DayNightTheme = DayNightTheme.DAY
+    val appTheme: DayNightTheme = DayNightTheme.DAY,
+    val notificationId: Int = -1
 ){
     fun asLoading() = isLoading
 
     fun asNews() = news
 
     fun asAppTheme() = appTheme
+
+    fun asNotificationId() = notificationId
 }

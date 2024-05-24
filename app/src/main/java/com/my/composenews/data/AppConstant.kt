@@ -9,4 +9,7 @@ object AppConstant {
 
     const val PAGE_SIZE = 10
     const val INITIAL_PAGE = 1
+
+    const val MSG_CHANNEL_ID = "compose_news_msg"
+    const val MSG_CHANNEL_NAME = "general"
 }

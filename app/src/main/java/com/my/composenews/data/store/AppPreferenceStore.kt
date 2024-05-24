@@ -10,4 +10,8 @@ interface AppPreferenceStore {
     suspend fun putDayNightTheme(theme: DayNightTheme)
 
     suspend fun pullDayNightTheme(): Flow<DayNightTheme>
+
+    suspend fun putNotificationId(id: Int)
+
+    suspend fun pullNotificationId(): Flow<Int>
 }

@@ -63,6 +63,7 @@ fun MainScreen() {
     val viewModel: MainViewModel = hiltViewModel()
     val news = viewModel.newsList.collectAsState()
     val appTheme = viewModel.appTheme.collectAsState()
+    val currentNotificationId = viewModel.notificationId.collectAsState()
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -201,7 +202,11 @@ fun MainScreen() {
                         news = news.value,
                         event = viewModel.uiEvent,
                         onAction = viewModel::onActionMain,
-                        category = tabTitles[page].lowercase()
+                        category = tabTitles[page].lowercase(),
+                        saveNotification = {
+                            viewModel.keepNotifyId(it)
+                        },
+                        currentNotificationId = currentNotificationId.value
                     )
                 }
             }
