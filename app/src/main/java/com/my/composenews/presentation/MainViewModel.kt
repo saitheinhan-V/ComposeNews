@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.my.composenews.data.repository.NotificationRepository
 import com.my.composenews.data.resource.NetworkResponse
 import com.my.composenews.presentation.utils.NetworkHelper
 import com.my.composenews.presentation.event.MainEvent
@@ -30,8 +31,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val networkHelper: NetworkHelper,
-    private val useCase: MainUseCase
-) : ViewModel(){
+    private val useCase: MainUseCase,
+    private val notiRepo: NotificationRepository
+) : ViewModel() {
 
     private val vmEvent = MutableSharedFlow<MainEvent>()
     val uiEvent get() = vmEvent.asSharedFlow()
@@ -60,13 +62,20 @@ class MainViewModel @Inject constructor(
             started = SharingStarted.Eagerly,
             initialValue = vmState.value.asAppTheme()
         )
+
+    val notificationId = vmState.map(MainViewModelState::asNotificationId)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = vmState.value.asNotificationId()
+        )
+
     init {
 //        observeNews()
         observeAppTheme()
-
     }
 
-    private fun observeAppTheme(){
+    private fun observeAppTheme() {
         viewModelScope.launch {
             useCase.getAppTheme.invoke().collectLatest {
                 vmState.update { state ->
@@ -78,9 +87,9 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun observeNews(category: String){
+    fun observeNews(category: String) {
         viewModelScope.launch {
-            if(!networkHelper.isNetworkConnected()){
+            if (!networkHelper.isNetworkConnected()) {
                 vmEvent.emit(MainEvent.showSnack("No internet connection!"))
                 return@launch
             }
@@ -125,22 +134,42 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun onActionMain(action: MainAction){
-        when(action){
+    fun onActionMain(action: MainAction) {
+        when (action) {
             is MainAction.ClickFavour -> {
 
             }
+
             is MainAction.ItemClick -> {
 
             }
 
             is MainAction.SwitchTheme -> {
                 viewModelScope.launch {
-                    val theme = when(action.isDark){
+                    val theme = when (action.isDark) {
                         true -> DayNightTheme.NIGHT
                         false -> DayNightTheme.DAY
                     }
                     useCase.setAppTheme.invoke(theme)
+                }
+            }
+        }
+    }
+
+    fun keepNotifyId(id: Int) {
+        viewModelScope.launch {
+            notiRepo.saveNotificationId(id)
+            getNotifyId()
+        }
+    }
+
+    fun getNotifyId(){
+        viewModelScope.launch {
+            notiRepo.getNotificationId().collectLatest {
+                vmState.update { state ->
+                    state.copy(
+                        notificationId = it
+                    )
                 }
             }
         }

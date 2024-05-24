@@ -24,7 +24,6 @@ class NewsListPagingSource @Inject constructor(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NewsDTO> {
         val currentPage = params.key ?: AppConstant.INITIAL_PAGE
         val pageSize = params.loadSize
-        Log.i("current.page",currentPage.toString())
         return try {
             val response = apiService.getNews(
                 countryCode = AppConstant.COUNTRY_CODE,
@@ -33,6 +32,7 @@ class NewsListPagingSource @Inject constructor(
                 category = category
             )
             val article = response.body()?.articles.orEmpty()
+            Log.i("current.page",currentPage.toString() + " Size = " + article.size)
             LoadResult.Page(
                 data = article,
                 prevKey = if (currentPage == 1) null else currentPage - 1,

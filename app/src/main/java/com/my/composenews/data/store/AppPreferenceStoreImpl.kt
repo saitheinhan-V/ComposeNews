@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.my.composenews.data.dispatcher.DispatcherModule
 import com.my.composenews.ui.theme.DayNightTheme
@@ -27,6 +28,7 @@ class AppPreferenceStoreImpl @Inject constructor(
         const val APP_PREF_NAME = "com.compose.news"
         val DAY_NIGHT_THEME = stringPreferencesKey("theme.day.night")
         val DYNAMIC_THEME = booleanPreferencesKey("theme.dynamic")
+        val NOTIFY_ID = intPreferencesKey("notification.id")
     }
 
     override suspend fun pullIsDynamic(): Boolean {
@@ -60,5 +62,26 @@ class AppPreferenceStoreImpl @Inject constructor(
                     DayNightTheme.valueOf(s)
                 } ?: DayNightTheme.SYSTEM
             }.flowOn(io)
+    }
+
+    override suspend fun putNotificationId(id: Int) {
+        withContext(io) {
+            ds.edit {
+                it[NOTIFY_ID] = id
+            }
+        }
+    }
+
+    override suspend fun pullNotificationId(): Flow<Int> {
+        return ds.data
+            .catch { e ->
+                if (e is IOException) {
+                    emit(emptyPreferences())
+                } else throw e
+            }
+            .map {
+                it[NOTIFY_ID] ?: -1
+            }.flowOn(io)
+
     }
 }
