@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ComposeNews</string>
 
@@ -11,6 +12,6 @@
         <item>Technology</item>
     </string-array>
 
-    <string name="home">Home</string>
-    <string name="chat">Chat</string>
+    <string name="home">မူလစာမျက်နှာ</string>
+    <string name="chat">စာပို့ရန်</string>
 </resources>

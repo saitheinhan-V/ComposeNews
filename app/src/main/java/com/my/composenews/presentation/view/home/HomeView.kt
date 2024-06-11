@@ -1,7 +1,6 @@
-package com.my.composenews.presentation.view.main
+package com.my.composenews.presentation.view.home
 
 import android.Manifest
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -10,7 +9,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,12 +17,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -55,20 +50,27 @@ import com.my.composenews.domain.vo.NewsVo
 import com.my.composenews.presentation.MainActivity
 import com.my.composenews.presentation.event.MainAction
 import com.my.composenews.presentation.event.MainEvent
-import com.my.composenews.presentation.event.NewsUiState
+import com.my.composenews.presentation.utils.DateConverterUtils
 import com.my.composenews.presentation.view.ScrollIndicator
 import com.my.composenews.presentation.view.shrimmer.NewsListShimmer
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.datetime.toLocalDateTime
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalPermissionsApi::class)
 @Composable
-fun MainView(
+fun HomeView(
     modifier: Modifier = Modifier,
     news: Flow<PagingData<NewsVo>> = emptyFlow(),
     event: SharedFlow<MainEvent> = MutableSharedFlow(),
@@ -104,6 +106,29 @@ fun MainView(
         }
     }
 
+    val currentDateTime = remember {
+        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+    }
+    val currentTimeMillis = System.currentTimeMillis()
+    val inputTimeMillis = 1717113030000
+    val inputDateTime = Instant.fromEpochMilliseconds(1717113030000).toLocalDateTime(TimeZone.currentSystemDefault())
+    val dayOfYear = remember { inputDateTime.dayOfYear }
+    val week = remember {
+        currentDateTime.toJavaLocalDateTime().format(DateTimeFormatter.ofPattern("EEE"))
+    }
+    val month = remember {
+        inputDateTime.month
+    }
+    val year = remember {
+        inputDateTime.year
+    }
+    val diffWeekDay = remember {
+        currentDateTime.dayOfYear-inputDateTime.dayOfYear
+    }
+    val dayOfWeek = remember {
+        inputDateTime.toJavaLocalDateTime().format(DateTimeFormatter.ofPattern("EEE"))
+    }
+
     Box(
         modifier = modifier,
         contentAlignment = Alignment.BottomEnd
@@ -121,12 +146,22 @@ fun MainView(
                             .fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        )
+                        {
+                            Text(text = "Day of Year: $dayOfYear $week")
+                            Text(text = "Month: $month, Year: $year")
+                            Text(text = "Diff: $diffWeekDay $dayOfWeek")
+                            Text(text = DateConverterUtils.formatDateTime(currentTimeMillis,inputTimeMillis,false,"yesterday","today"))
+                        }
                         Button(
                             onClick = {
                                 scope.launch {
                                     if (!notificationPermission.status.isGranted)
                                         notificationPermission.launchPermissionRequest()
-                                    else{
+                                    else {
                                         val id = System.currentTimeMillis().toInt()
                                         saveNotification(id)
                                         showNotification(context = context, id = id)
@@ -139,7 +174,7 @@ fun MainView(
                         Button(
                             onClick = {
                                 scope.launch {
-                                    cancelNotification(context,currentNotificationId)
+                                    cancelNotification(context, currentNotificationId)
                                 }
                             }
                         ) {
@@ -243,14 +278,15 @@ fun MainView(
 
 fun doesNotificationChannelExist(context: Context, channelId: String): Boolean {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val existingChannel = notificationManager.getNotificationChannel(channelId)
         return existingChannel != null
     }
     return false
 }
 
-fun showNotification(context: Context,id: Int) {
+fun showNotification(context: Context, id: Int) {
     //create channel
 //    if(Build.VERSION.SDK_INT > Build.VERSION_CODES.O){
 //
@@ -285,7 +321,7 @@ fun showNotification(context: Context,id: Int) {
         .setPriority(NotificationCompat.PRIORITY_HIGH)
         .setContentIntent(pendingIntent)
         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-        .setGroup("200")
+        .setGroup("MjU5NDAwNDAwMTcxNjI2ODEyMDUwMQ")
 //        .setStyle(NotificationCompat.InboxStyle()
 //            .addLine("Message 1")
 //            .addLine("Message 2")
@@ -311,23 +347,28 @@ fun showNotification(context: Context,id: Int) {
             return@with
         }
 
-        Log.i("notification.id","Show $id")
+        Log.i("notification.id", "Show $id")
         notify(id, builder.build())
     }
 }
 
 fun cancelNotification(context: Context, id: Int) {
-    Log.i("notification.id","Hide $id")
+    Log.i("notification.id", "Hide $id")
 
-    val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    val notificationManager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 //    notificationManager.cancel(id)
     val activeNotifications = notificationManager.activeNotifications
-    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         activeNotifications.forEach {
-            if(it.notification.group == "300"){
+            if (it.notification.group == "MjU5NDAwNDAwMTcxNjI2ODEyMDUwMQ") {
                 notificationManager.cancel(it.id)
             }
         }
     }
 
+}
+
+fun getDayOfYear(localDateTime: LocalDateTime): Int {
+    return localDateTime.dayOfYear
 }

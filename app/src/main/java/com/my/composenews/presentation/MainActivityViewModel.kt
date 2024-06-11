@@ -6,6 +6,7 @@ import com.my.composenews.data.repository.PushRepository
 import com.my.composenews.domain.usecase.GetAppTheme
 import com.my.composenews.presentation.event.MainActivityEvent
 import com.my.composenews.presentation.event.MainActivityViewModelState
+import com.my.composenews.presentation.navigation.controller.Navigator
 import com.my.composenews.ui.theme.AppThemeStatus
 import com.my.composenews.ui.theme.DayNightTheme
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val getTheme: GetAppTheme,
-    private val pushRepo: PushRepository
+    private val pushRepo: PushRepository,
+    val navigator: Navigator
 ): ViewModel() {
 
     private val vmState = MutableStateFlow(MainActivityViewModelState())
