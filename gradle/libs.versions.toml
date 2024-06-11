@@ -12,6 +12,7 @@ google-hilt = "2.50"
 google-ksp = "1.9.22-1.0.17"
 androidx-datastore = "1.0.0"
 gms = "4.4.1"
+material3 = "1.1.0"
 
 
 [libraries]
@@ -29,8 +30,11 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-material3-icon = { module = "androidx.compose.material:material-icons-extended", version.ref = "material3"}
 compose-coil = { module = "io.coil-kt:coil-compose", version = "2.5.0" }
 androidx-splash = { module = "androidx.core:core-splashscreen", version = "1.0.1" }
+compose-navigation = { module = "androidx.navigation:navigation-compose", version = "2.7.7" }
+
 #data-store
 androidx-datastore = { group = "androidx.datastore", name = "datastore", version.ref = "androidx-datastore" }
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "androidx-datastore" }
@@ -64,6 +68,9 @@ google-accompanist-pager-indicator = { module = "com.google.accompanist:accompan
 firebase-bom = { module = "com.google.firebase:firebase-bom", version = "33.0.0" }
 firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
 firebase-analytics-ktx = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+#agora
+agora-rtc = { module = "io.agora.rtc:full-sdk", version = "4.2.2" }
+
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

@@ -65,6 +65,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.compose.coil)
     implementation(libs.androidx.splash)
+    implementation(libs.compose.navigation)
+    implementation(libs.androidx.material3.icon)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -103,4 +105,8 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging.ktx)
     implementation(libs.firebase.analytics.ktx)
+    //agora
+    implementation(libs.agora.rtc)
+
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 }

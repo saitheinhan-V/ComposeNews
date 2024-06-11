@@ -1,4 +1,4 @@
-package com.my.composenews.presentation.view.main
+package com.my.composenews.presentation.view.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
