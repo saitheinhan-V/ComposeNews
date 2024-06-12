@@ -42,7 +42,7 @@ jobs:
       - name: Build Signed APK
         uses: r0adkll/sign-android-release@v1
         with:
-            releaseDirectory: app/build/outputs/apk/release
+            releaseDirectory: app/release
             signingKeyBase64: ${{ secrets.SIGNING_KEY }}
             alias: ${{ secrets.SIGNING_ALIAS }}
             keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -54,7 +54,7 @@ jobs:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           token: ${{ secrets.FIREBASE_TOKEN }}
           groups: testers
-          file: app/build/outputs/apk/release/app-release.apk
+          file: app/release/app-release.apk
 
       - name: Send FCM Notification
         run: |
