@@ -39,28 +39,43 @@ jobs:
       - name: setup gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug
+      - name: build gradle
+        uses: ./gradlew build
 
-      - name: Upload debug APK to Firebase App Distribution
+      - name: Build release APK
+        run: ./gradlew assembleRelease
+
+      - name: Build Sign APK
+        uses: r0adkll/sign-android-release@v1
+        with:
+            releaseDirectory: app/build/outputs/apk/release
+            signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+            alias: ${{ secrets.SIGNING_ALIAS }}
+            keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+            keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Upload release APK to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           token: ${{ secrets.FIREBASE_TOKEN }}
           groups: testers
-          file: app/build/outputs/apk/debug/app-debug.apk
+          file: app/build/outputs/apk/release/app-release.apk
 
-      - name: Notify testers via Firebase
+      - name: Send FCM Notification
         run: |
-          curl -X POST --header "Authorization: Bearer ${{ secrets.FIREBASE_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          -d '{
-            "message": {
-              "topic": "testers",
-              "notification": {
-                "title": "New APK Available",
-                "body": "A new version of Compose News App is available for testing."
-              }
-            }
-          }' \
-          https://fcm.googleapis.com/v1/projects/composenews-b6b73/messages:send
+            curl -X POST --header "Authorization: key=${{ secrets.FCM_SERVER_KEY }}" \
+            --header "Content-Type: application/json" \
+            -d '{
+                  "to": "testers",
+                  "notification": {
+                    "title": "New App Version Released",
+                    "body": "A new version of ComposeNews is now available for download."
+                  }
+                }' \
+            https://fcm.googleapis.com/fcm/send
+
+      - name: Send Slack Notification
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"New version of ComposeNews available!"}' \
+          https://hooks.slack.com/services/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

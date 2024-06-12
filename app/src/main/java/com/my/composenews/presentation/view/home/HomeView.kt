@@ -146,16 +146,6 @@ fun HomeView(
                             .fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        )
-                        {
-                            Text(text = "Day of Year: $dayOfYear $week")
-                            Text(text = "Month: $month, Year: $year")
-                            Text(text = "Diff: $diffWeekDay $dayOfWeek")
-                            Text(text = DateConverterUtils.formatDateTime(currentTimeMillis,inputTimeMillis,false,"yesterday","today"))
-                        }
                         Button(
                             onClick = {
                                 scope.launch {
