@@ -39,6 +39,9 @@ jobs:
           build-tools-version: 30.0.3
           components: build-tools;30.0.3, platform-tools
 
+      - name: Build Gradle
+        run: ./gradlew build
+
       - name: Build with Gradle
         run: ./gradlew assembleRelease
 
