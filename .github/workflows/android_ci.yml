@@ -16,8 +16,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          repository: ${{ github.repository }}
 
       - name: validate gradle wrapper
         uses: gradle/wrapper-validation-action@v1
@@ -38,31 +36,16 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
 
-      - name: build gradle
-        uses: ./gradlew build
+      - name: Build debug APK
+        uses: ./gradlew assembleDebug
 
-      - name: Build release APK
-        uses: ./gradlew assembleRelease
-
-      - name: List files
-        run: ls -lrt app/build/outputs/apk/release
-
-      - name: Build Signed APK
-        uses: r0adkll/sign-android-release@v1
-        with:
-            releaseDirectory: app/release
-            signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-            alias: ${{ secrets.SIGNING_ALIAS }}
-            keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
-            keyPassword: ${{ secrets.KEY_PASSWORD }}
-
-      - name: Upload release APK to Firebase App Distribution
+      - name: Upload debug APK to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           token: ${{ secrets.FIREBASE_TOKEN }}
           groups: testers
-          file: app/release/app-release.apk
+          file: app/build/output/apk/debug/app-debug.apk
 
       - name: Send FCM Notification
         run: |
