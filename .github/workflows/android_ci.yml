@@ -15,7 +15,9 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.5
+        uses: actions/checkout@v3
+        with:
+          ref: master
 
       - name: validate gradle wrapper
         uses: gradle/wrapper-validation-action@v1
