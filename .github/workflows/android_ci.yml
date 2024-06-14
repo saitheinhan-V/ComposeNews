@@ -15,7 +15,13 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.5
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}
+          ref: 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
+
+      - name: validate gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
 
       - name: Cache Gradle Dependencies
         uses: actions/cache@v3
@@ -27,37 +33,52 @@ jobs:
           restore-keys: |
             gradle-${{ runner.os }}-
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v4.2.1
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'adopt'
+          distribution: 'zulu'
 
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: build gradle
+        uses: ./gradlew build
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug
+      - name: Build release APK
+        uses: ./gradlew assembleRelease
 
-      - name: Upload debug APK to Firebase App Distribution
+      - name: List files
+        run: ls -lrt app/build/outputs/apk/release
+
+      - name: Build Signed APK
+        uses: r0adkll/sign-android-release@v1
+        with:
+            releaseDirectory: app/release
+            signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+            alias: ${{ secrets.SIGNING_ALIAS }}
+            keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+            keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Upload release APK to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           token: ${{ secrets.FIREBASE_TOKEN }}
           groups: testers
-          file: app/build/outputs/apk/debug/app-debug.apk
+          file: app/release/app-release.apk
 
-      - name: Notify testers via Firebase
+      - name: Send FCM Notification
         run: |
-          curl -X POST --header "Authorization: Bearer ${{ secrets.FIREBASE_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          -d '{
-            "message": {
-              "topic": "testers",
-              "notification": {
-                "title": "New APK Available",
-                "body": "A new version of Compose News App is available for testing."
-              }
-            }
-          }' \
-          https://fcm.googleapis.com/v1/projects/composenews-b6b73/messages:send
+            curl -X POST --header "Authorization: key=${{ secrets.FCM_SERVER_KEY }}" \
+            --header "Content-Type: application/json" \
+            -d '{
+                  "to": "testers",
+                  "notification": {
+                    "title": "New App Version Released",
+                    "body": "A new version of ComposeNews is now available for download."
+                  }
+                }' \
+            https://fcm.googleapis.com/fcm/send
+
+      - name: Send Slack Notification
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"New version of ComposeNews available!"}' \
+          https://hooks.slack.com/services/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
