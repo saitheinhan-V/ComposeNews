@@ -39,8 +39,14 @@ jobs:
       - name: setup gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: build gradle
+        uses: ./gradlew build
+
       - name: Build release APK
         uses: ./gradlew assembleRelease
+
+      - name: List files
+        run: ls -lrt app/build/outputs/apk/release
 
       - name: Build Signed APK
         uses: r0adkll/sign-android-release@v1
